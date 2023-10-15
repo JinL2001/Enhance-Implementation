@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI chatbox</title>
+    <style>
+        /* 基本样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+            height: 100vh; /* 100%视口高度 */
+        }
+        .container {
+            max-width: 4000px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 20);
+            border-radius: 5px;
+            overflow: hidden;
+            padding: 40px;
+        }
+        h1 {
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 16px;
+            display: block;
+            margin-bottom: 20px;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        /* 隐藏聊天容器 */
+        .chat-container {
+            display: none;
+        }
+        /* 调整聊天框大小 */
+        .chat-box {
+            max-height: 550px; /* 聊天气泡高度，比chat-container小一点 */
+            overflow-y: scroll;
+            padding: 10px;
+            list-style: none; /* 移除默认列表样式 */
+        }
+        .message {
+            padding: 8px 15px; /* 调整消息框样式 */
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            position: relative;
+            clear: both;
+            display: inline-block;
+            max-width: 50%; /* 限制消息气泡的最大宽度 */
+            word-wrap: break-word; /* 句子太长时，将其分割到下一行 */
+        }
+        .user-message {
+            background-color: #ddd;
+            color: #333;
+            float: right; /* 调整消息框方向 */
+            margin-right: 10px;
+        }
+        .ai-message {
+            background-color: #75a5f4;
+            color: #333;
+            float: left; /* 调整消息框方向 */
+            margin-left: 10px;
+        }
+
+     
+            
+                                        /* 输入框样式 */
+        .chat-input {
+            padding: 10px;
+            position: relative;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .chat-container {     
+            position: relative;                      /* 聊天框大小 */
+            width: 700px;
+            height: 700px;
+            margin: 20px auto;
+            box-shadow: 0 2px 2px 2px #999;
+        }
+
+        .chat-header {
+            height: 40px;
+            padding: 0 10px;
+            background-color: #666;
+        }
+
+        .header-title {
+            height: 40px;
+            line-height: 40px;
+            font-size: 14px;
+            color: #eee;
+        }
+
+        .chat-box {
+            margin: 0px;
+            height: calc(100% - 60px);
+            overflow-y: scroll;
+            padding: 100px auto;
+            list-style: none;
+            overflow-x: hidden;
+            
+        }
+
+
+        .chat-input {                    /* 文本输入框 */  
+            position: absolute;
+            bottom: 0;
+            width: 95%;
+            height: 50px; 
+
+        }
+
+        .input-words {
+            border: none;
+            width: 89%;
+            padding: 8px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .input-submit {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+        }
+
+       
+    </style>
+</head>
+<body>
+    <div class="container" id="preChatContainer">
+        <h1>Please select gender and types</h1>
+        <form id="chatForm">
+            <label for="gender">Gender：</label>
+            <select id="gender" name="gender" onchange="updatePersonalityOptions()">
+                <option value="male">Boyfriend</option>
+                <option value="female">Girlfriend</option>
+            </select>
+            <label for="personality">Types：</label>
+            <select id="personality" name="personality">
+               
+            </select>
+            <button type="button" onclick="startChat()">Start your journey now</button>
+        </form>
+    </div>
+
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <div class="header-title">AI Chatbot</div>
+        </div>
+        <div class="chat-box" id="chatLog">
+        </div>
+        <div class="chat-input">
+            <textarea class="input-words" id="messageInput" placeholder="Please type your words....."></textarea>
+            <button class="input-submit" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function updatePersonalityOptions() {
+            const genderSelect = document.getElementById('gender');
+            const personalitySelect = document.getElementById('personality');
+            const selectedGender = genderSelect.value;
+
+            // 清空性格类型选项
+            personalitySelect.innerHTML = '';
+
+            // 根据选择的性别添加相应的性格类型选项
+            if (selectedGender === 'male') {
+                const maleOptions = ['aloof', 'gentle', 'knowledgeable'];
+                maleOptions.forEach(option => {
+                    const newOption = document.createElement('option');
+                    newOption.value = option.toLowerCase();
+                    newOption.textContent = option;
+                    personalitySelect.appendChild(newOption);
+                });
+            } else if (selectedGender === 'female') {
+                const femaleOptions = ['warm-hearted', 'cute', 'ice-queen'];
+                femaleOptions.forEach(option => {
+                    const newOption = document.createElement('option');
+                    newOption.value = option.toLowerCase();
+                    newOption.textContent = option;
+                    personalitySelect.appendChild(newOption);
+                });
+            }
+        }
+
+        function startChat() {
+            const preChatContainer = document.getElementById('preChatContainer');
+            const chatContainer = document.getElementById('chatContainer');
+            const gender = document.getElementById('gender').value;
+            const personality = document.getElementById('personality').value;
+
+            // 隐藏前面的page，显示聊天框
+            preChatContainer.style.display = 'none';
+            chatContainer.style.display = 'block';
+
+  
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+
+            if (message === '') {
+                return;
+            }
+
+            const chatLog = document.getElementById('chatLog');
+
+            // 用户消息
+            const userMessageElement = document.createElement('div');
+            userMessageElement.className = 'message user-message'; 
+            userMessageElement.innerHTML = '<strong>You:</strong> ' + message;             //将 “You:”加粗
+            chatLog.appendChild(userMessageElement);
+
+              // 发送之后，滚动到最新消息
+            chatLog.scrollTop = chatLog.scrollHeight;
+
+            // 发送之后，立即清空我输入的消息
+            messageInput.value = '';
+
+
+            // 发送用户消息到后端
+
+            fetch('http://localhost:5000/sendMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                const aiResponseElement = document.createElement('div');
+                aiResponseElement.className = 'message ai-message'; // 添加 ai-message 类
+                aiResponseElement.innerHTML = '<strong>AI:</strong> ' + data.message;               //将 “AI:”加粗
+                chatLog.appendChild(aiResponseElement);
+
+                // 清空消息输入框
+                messageInput.value = '';
+
+                // 滚动到最新消息
+                chatLog.scrollTop = chatLog.scrollHeight;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        }
+
+            document.getElementById('messageInput').addEventListener('keydown', function(e) {      //用enter发送消息
+        
+                if (e.key === 'Enter') {
+        
+                e.preventDefault();
+                
+                sendMessage();
+            }
+});
+
+
+        // 初始化，将消息输入框设置为聚焦状态
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('messageInput').focus();
+        });
+    </script>
+</body>
+</html>
