@@ -7,3 +7,4 @@
 7. Set up Amazon AWS for server.
 8. User databse in RDS.
 9. Chatbot backend run in EC2
+10.Our chatbot can run at http://aichatbotfront.s3-website.us-east-2.amazonaws.com/
