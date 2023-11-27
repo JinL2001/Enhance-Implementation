@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 100px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        h1 {
+            margin-top: 0;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 20px; /* 将按钮放在图片下方 */
+        }
+        .register-button {
+            background-color: transparent;
+            border: none;
+            color: #007bff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .form-container {
+            display: none;
+        }
+        .form-container.active {
+            display: block;
+        }
+        #introduction-container {
+            padding: 20px;
+        }
+        #introduction-text {
+            margin-bottom: 20px;
+        }
+        #images-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap; /* 如果容器太小，允许项目换行 */
+            margin-bottom: 20px; /* 将图片和按钮分开 */
+        }
+        .image-container {
+            text-align: center;
+        }
+
+        .image-container img {
+            max-width: 300px; /* 设置最大宽度 */
+            max-height: 300px; /* 设置最大高度 */
+            width: auto;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="form-container active" id="introduction-container">
+            <h1>Welcome</h1>
+            <p id="introduction-text">Intro page test: 6 type of girl/boys</p>
+            <div id="images-container">
+                <div class="image-container">
+                    <img src="1.jpg" alt="Image 1">
+                    <p>类型1</p>
+                </div>
+                <div class="image-container">
+                    <img src="2.jpg" alt="Image 2">
+                    <p>类型2</p>
+                </div>
+                <div class="image-container">
+                    <img src="1.jpg" alt="Image 3">
+                    <p>类型3</p>
+                </div>
+                <div class="image-container">
+                    <img src="2.jpg" alt="Image 4">
+                    <p>类型4</p>
+                </div>
+                <div class="image-container">
+                    <img src="1.jpg" alt="Image 5">
+                    <p>类型5</p>
+                </div>
+                <div class="image-container">
+                    <img src="2.jpg" alt="Image 6">
+                    <p>类型6</p>
+                </div>
+            </div>
+            <button id="start-button">Start Using</button>
+        </div>
+    
+    
+        
+        <div class="form-container" id="login-container">
+            <h1>Login</h1>
+            <form id="login-form">
+                <label for="login-username">Username:</label>
+                <input type="text" id="login-username" name="login-username" required>
+                <br>
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" name="login-password" required>
+                <br>
+                <button type="submit">Login</button>
+            </form>
+            <p id="login-error-message"></p>
+            <div class="button-container">
+                <button class="register-button" id="register-button"> Click here to register account</button>
+            </div>
+        </div>
+        
+        <div class="form-container" id="register-container">
+            <h1>Register</h1>
+            <form id="register-form">
+                <label for="register-username">Username:</label>
+                <input type="text" id="register-username" name="register-username" required>
+                <br>
+                <label for="register-password">Password:</label>
+                <input type="password" id="register-password" name="register-password" required>
+                <br>
+                <button type="submit">Register</button>
+            </form>
+            <p id="register-success-message"></p>
+            <p id="register-error-message"></p>
+            <div class="button-container">
+                <button class="register-button" id="return-to-login">Back to Login</button>
+            </div>
+        </div>
+    
+    
+    <script>
+        const introductionContainer = document.getElementById("introduction-container");         //给每个按钮赋名：例如：introductionContainer在script中 = html和css中的introduction-container
+        const loginContainer = document.getElementById("login-container");
+        const registerContainer = document.getElementById("register-container");
+        const startButton = document.getElementById("start-button");
+        const registerButton = document.getElementById("register-button");
+        const returnToLoginButton = document.getElementById("return-to-login");
+        
+        startButton.addEventListener("click", function(event) {       //点击start 按钮触函数
+            event.preventDefault();                                    //防止不需要的页面刷新函数
+            introductionContainer.classList.remove("active");           //remove loginContainer 
+            loginContainer.classList.add("active");                     // loginContainer 启动
+        });
+        
+        registerButton.addEventListener("click", function(event) {      //点击 register触发function
+            event.preventDefault();                                      //防止不需要的页面刷新函数
+            document.getElementById("login-error-message").textContent = "";    // 清除登录错误信息
+            loginContainer.classList.remove("active");                      //remove loginContainer
+            registerContainer.classList.add("active");                      // registerContainer 启动
+        });
+        
+        returnToLoginButton.addEventListener("click", function(event) {     //点击触发returnToLogin按钮触发function
+            event.preventDefault();                                         //防止不需要的页面刷新函数
+            registerContainer.classList.remove("active");                   //remove registerContainer
+            loginContainer.classList.add("active");                         //启动 loginContainer
+        });
+
+        const users = [                                                     //常量users，储存用户信息  
+            { username: "user1", password: "password1" },
+            { username: "user2", password: "password2" }
+        ];
+
+        
+        
+        
+        
+        
+        document.getElementById("login-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const loginUsername = document.getElementById("login-username").value;
+    const loginPassword = document.getElementById("login-password").value;
+    
+
+    try {
+        // 发送POST请求到后端
+        const response = await fetch("http://172.31.39.154:8000/login", {    //使用接口8000
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: loginUsername,
+                password: loginPassword
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.status === 200) {  // 如果后端返回200，说明登录成功
+            window.location.href = "index.html";
+        } else if (response.status === 400) {  // 如果后端返回400，说明登录失败
+            document.getElementById("login-error-message").textContent = data.message;
+        }
+    } catch (error) {
+        document.getElementById("login-error-message").textContent = "An error occurred. Please try again.";
+    }
+});
+
+
+
+
+        
+        
+        
+        document.getElementById("register-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const registerUsername = document.getElementById("register-username").value;
+            const registerPassword = document.getElementById("register-password").value;
+
+            try {
+                const response = await fetch("http://172.31.39.154:8000/register", {     //使用接口8000
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+            },
+                    body: JSON.stringify({
+                        username: registerUsername,
+                        password: registerPassword
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.status === 200) {
+            document.getElementById("register-success-message").textContent = data.message + " Redirecting to login in 2s!";
+            setTimeout(function() {
+                document.getElementById("login-error-message").textContent = "";
+                registerContainer.classList.remove("active");
+                loginContainer.classList.add("active");
+            }, 2000);
+        } else if (response.status === 400) {
+            document.getElementById("register-error-message").textContent = data.message;
+        }
+
+    } catch (error) {
+        document.getElementById("register-error-message").textContent = "An error occurred. Please try again.";
+    }
+});
+
+
+    </script>
+</body>
+</html>
