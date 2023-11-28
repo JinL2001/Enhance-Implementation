@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI chatbox</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #83a4d4, #b6fbff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 4000px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 20);
+            border-radius: 5px;
+            overflow: hidden;
+            padding: 40px;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            font-size: 16px;
+            display: block;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .chat-container {
+            display: none;
+            position: relative;
+            width: 700px;
+            height: 700px;
+            margin: 20px auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-header {
+            height: 40px;
+            padding: 0 10px;
+            background-color: #555;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .header-title {
+            height: 40px;
+            line-height: 40px;
+            font-size: 14px;
+            color: #eee;
+            text-align: center;
+        }
+
+        .chat-box {
+            margin: 0px;
+            height: calc(97% - 90px);
+            overflow-y: scroll;
+            padding: 100px auto;
+            list-style: none;
+            overflow-x: hidden;
+        }
+
+        .message {
+            padding: 8px 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            position: relative;
+            clear: both;
+            display: inline-block;
+            max-width: 50%;
+            word-wrap: break-word;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-message {
+            background-color: #ddd;
+            color: #333;
+            float: right;
+            margin-right: 10px;
+        }
+
+        .ai-message {
+            background-color: #9eeff3;
+            color: #333;
+            float: left;
+            margin-left: 10px;
+        }
+
+        .chat-input {
+            padding: 10px;
+            position: relative;
+        }
+
+        input[type="text"], textarea {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.2s;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-input {
+            position: relative;
+            bottom: 0;
+            width: 95%;
+            height: 50px;
+        }
+
+        .input-words {
+            border: none;
+            width: 89%;
+            padding: 8px;
+            font-size: 14px;
+            color: #333;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .input-submit {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="preChatContainer">
+        <h1>Please select your boyfriend or girlfiend</h1>
+        <form id="chatForm">
+            <label for="gender">Gender：</label>
+            <select id="gender" name="gender" onchange="updatePersonalityOptions()">
+                <option value="" disabled selected hidden>Select Gender</option>
+                <option value="male">Boyfriend</option>
+                <option value="female">Girlfriend</option>
+            </select>
+
+            <label for="personality">Name:</label>
+            <select id="personality" name="personality">
+                
+            </select>
+
+            <button type="button" onclick="startChat()">Start your journey</button>
+        </form>
+    </div>
+
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <div class="header-title">AI Chat</div>
+        </div>
+
+        <div class="chat-box" id="chatLog">
+        </div>
+        <div class="chat-input">
+            <textarea class="input-words" id="messageInput" placeholder="Please type your words....."></textarea>
+            <button class="input-submit" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function updatePersonalityOptions() {
+            const genderSelect = document.getElementById('gender');
+            const personalitySelect = document.getElementById('personality');
+            const selectedGender = genderSelect.value;
+
+            // 清空性格类型选项
+            personalitySelect.innerHTML = '';
+
+            // 根据选择的性别添加相应的性格类型选项
+            if (selectedGender === 'male') {
+                const maleOptions = ['Jin', 'Ken', 'Kim'];
+                maleOptions.forEach(option => {
+                    const newOption = document.createElement('option');
+                    newOption.value = option.toUpperCase();
+                    newOption.textContent = option;
+                    personalitySelect.appendChild(newOption);
+                });
+            } else if (selectedGender === 'female') {
+                const femaleOptions = ['Lena', 'Lily', 'Rosa'];
+                femaleOptions.forEach(option => {
+                    const newOption = document.createElement('option');
+                    newOption.value = option.toUpperCase();
+                    newOption.textContent = option;
+                    personalitySelect.appendChild(newOption);
+                });
+            }
+        }
+
+        
+        function startChat() {
+            const preChatContainer = document.getElementById('preChatContainer');
+            const chatContainer = document.getElementById('chatContainer');
+            const gender = document.getElementById('gender').value;
+            const personality = document.getElementById('personality').value;
+
+            if (gender === "" || personality === "") {                     //加入不选择限制，强制选择性别和名字
+                alert("Please select both a gender and a name to continue.");
+                return; 
+            }
+
+
+            
+            selectedName= personality;   //为之后自动识别名字做准备
+
+            // 隐藏前面的page，显示聊天框
+            preChatContainer.style.display = 'none';
+            chatContainer.style.display = 'block';
+        }
+
+  
+        function getPort(gender, personality) {                     //设定每个角色的不同端口
+            personality = personality.toUpperCase();
+            if (gender === 'male') {
+                switch (personality) {
+                    case 'JIN':
+                        return '50';
+                    case 'KIM':
+                        return '51'; 
+                    case 'KEN':
+                        return '52';
+                  
+        }
+            } else if (gender === 'female') {
+                switch (personality) {
+                    case 'LENA':
+                        return '56'; 
+                    case 'LILY':
+                        return '54'; 
+                    case 'ROSA':
+                        return '55'; 
+
+        }
+    }
+
+}
+
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            const gender = document.getElementById('gender').value;
+            const personality = document.getElementById('personality').value;
+
+            console.log("Gender:", gender);
+            console.log("Personality:", personality);
+
+
+            if (message === '') {
+                return;
+            }
+
+            const port = getPort(gender, personality);
+            
+            const chatLog = document.getElementById('chatLog');
+
+            // 用户消息
+            const userMessageElement = document.createElement('div');
+            userMessageElement.className = 'message user-message'; 
+            userMessageElement.innerHTML = '<strong>You:</strong> ' + message;             //将 “You:”加粗
+            chatLog.appendChild(userMessageElement);
+
+            //AI加入正在输入中。。。
+
+            const typingMessageElement = document.createElement('div');
+            typingMessageElement.className = 'message ai-message'; 
+            typingMessageElement.innerHTML = `<strong>${selectedName}:</strong> Typing...`;
+            chatLog.appendChild(typingMessageElement);
+
+              // 发送之后，滚动到最新消息
+            chatLog.scrollTop = chatLog.scrollHeight;
+
+            // 发送之后，立即清空我输入的消息
+            messageInput.value = '';
+
+
+            // 发送用户消息到后端
+            const url = `http://18.220.199.71:${port}/sendMessage`;              // 自动获取选择性别与角色，转到匹配端口
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message }),
+            })
+            .then(response => response.json())
+            .then(data => {
+
+                //移除正在输入中。。。
+                chatLog.removeChild(typingMessageElement);
+
+                //AI生成的回复消息
+                const aiResponseElement = document.createElement('div');
+                aiResponseElement.className = 'message ai-message'; // 添加 ai-message 类
+                
+                
+                const aiResponseMessage = `<strong>${selectedName}:</strong> ` + data.message;               //将 “名字”加粗
+                aiResponseElement.innerHTML = aiResponseMessage;
+                chatLog.appendChild(aiResponseElement);
+
+                // 清空消息输入框
+                messageInput.value = '';
+
+                // 滚动到最新消息
+                chatLog.scrollTop = chatLog.scrollHeight;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        }
+
+            document.getElementById('messageInput').addEventListener('keydown', function(e) {      //用enter发送消息
+        
+                if (e.key === 'Enter') {
+        
+                e.preventDefault();
+                
+                sendMessage();
+            }
+});
+
+
+        // 初始化，将消息输入框设置为聚焦状态
+            document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('messageInput').focus();
+            updatePersonalityOptions();
+        });
+    </script>
+</body>
+
+</html>

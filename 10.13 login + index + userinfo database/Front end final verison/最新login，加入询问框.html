@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @keyframes gradientBackground {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @media (max-width: 768px) {
+    .container {
+        padding: 20px; /* Less padding on smaller screens */
+    }
+    h1 {
+        font-size: 1.5em; /* Smaller headings */
+    }
+    /* ...other adjustments... */
+}
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(270deg, #FFB6B9, #6078EA, #63E2C6);
+            background-size: 600% 600%;
+            animation: gradientBackground 15s infinite;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .container {
+            background-color: #fff;
+            padding: 100px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 800px; /* Adjust as needed */
+            width: 90%; /* Make the width relative */
+            margin: auto; /* Center the container */
+        }
+        
+        h1 {
+            margin-top: 0;
+        }
+        
+        label {
+            font-weight: bold;
+        }
+        
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .register-button {
+            background-color: transparent;
+            border: none;
+            color: #007bff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .register-button:hover {
+            text-decoration: underline;
+        }
+        
+        .form-container {
+            display: none;
+        }
+        
+        .form-container.active {
+            display: block;
+        }
+        
+        #introduction-container {
+            padding: 20px;
+        }
+        
+        #introduction-text {
+            margin-bottom: 20px;
+        }
+        
+        #images-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .image-container {
+            text-align: center;
+            position: relative;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .image-description {
+            display: none;
+            position: absolute;
+            bottom: 10px; /* 调整文本框位置 */
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.7); /* 半透明背景 */
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .image-container:hover .image-description {
+            display: block;
+        }
+
+        .image-container img {
+            max-width: 300px;
+            max-height: 300px;
+            width: auto;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .image-container:hover img {
+            transform: scale(1.05);
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+       
+       
+      
+        
+
+       
+       
+        .gender-button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .gender-button:hover {
+            background-color: #0056b3;
+        }
+       
+        
+
+
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container active" id="introduction-container">
+            <h1>Welcome to AI-Personal Chatbot</h1>
+            <p id="introduction-text">
+                Embark on a journey of discovery and uncover the unique you!
+                <br><br>
+                Our intro page brings you six distinct personality types, each representing diverse interests and professional backgrounds. From fitness instructors to educators, and architectural designers to graphic designers, these varied roles showcase the rich tapestry of human life and career choices.
+                <br><br>
+                - <strong>Explore and Choose</strong>: Browse our collection of characters, each with their own unique story and background. See which one resonates with you the most.
+                <br>
+                - <strong>Interactive Experience</strong>: As you hover over each character image, a description box appears, detailing the character’s name, age, profession, and interests.
+                <br>
+                - <strong>Begin Your Journey</strong>: After selecting the type that interests you, click the “Start Using” button to enter a tailored interactive experience.
+                <br><br>
+                At AI-Personal Chatbot, we believe in the uniqueness of each individual. Our aim is to help you discover and explore a broader world through these diverse character presentations.
+                <br><br>
+                <strong>Ready to start?</strong> Explore our characters, find the one that echoes with you, and embark on your personalized journey!
+            </p>
+        
+            <div id="images-container">
+                <div class="image-container">
+                    <img src="https://i.imgur.com/oxFP12G.jpeg" alt="Image 1">
+                    <div class="image-description">
+                        Name: Jin;   Age: 28;   Fitness Instructor and Nutritional Consultant;   Certified Strength and Conditioning Specialist, Degree in Nutritional Science
+                        
+                    </div>
+                    <p>Jin</p>
+                </div>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/nPkeoRr.jpeg" alt="Image 2">
+                    <div class="image-description">
+                        Name: Ken;   Age: 28;    High School Teacher in Science and Mathematics;   Interests: Nature hikes, technology, reading, puzzle games, and cooking.
+                    </div>
+                    <p>Ken</p>
+                </div>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/qkytC4z.jpeg" alt="Image 3">
+                    <div class="image-description">
+                        Name: Kim;   Age: 27;   Architectural Designer;   Interests: Jazz music, watercolor painting, hiking, culinary arts, and volunteer work.
+                    </div>
+                    <p>Kim</p>
+                </div>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/CYYqpnX.jpeg" alt="Image 4">
+                    <div class="image-description">
+                        Name: Lena;   Age: 25;   Graphic Designer;   Interests: Art, hiking, baking, indie music, and animal welfare.
+                    </div>
+                    <p>Lena</p>
+                </div>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/Z2VYoKr.jpeg" alt="Image 5">
+                    <div class="image-description">
+                        Name: Lily;   Educator and Mentor;   Specializations: Mathematics, Chemistry, Physics;  Teaching Experience: 10+ years;    Educational Philosophy: Empowerment through knowledge; nurturing curiosity and independent problem-solving.
+                    </div>
+                    <p>Lily</p>
+                </div>
+                <div class="image-container">
+                    <img src="https://i.imgur.com/YHtd1Qk.jpeg" alt="Image 6">
+                    <div class="image-description">
+                        Name: Rosa;   Age: 29;   Fitness Coach and Nutrition Advisor;  B.S. in Nutritional Sciences, Certified Personal Trainer 
+                    </div>
+                    <p>Rosa</p>
+                </div>
+            </div>
+            <button id="start-button"><span class="icon"><i class="fas fa-play"></i></span>Start Using</button>
+        </div>
+
+
+
+        <div class="form-container" id="gender-selection-container" style="display: none;">
+            <h1>Are you looking for a girl or boy？</h1>
+            <button id="male-selection" class="gender-button">Girl</button>
+            <button id="female-selection" class="gender-button">Boy</button>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="form-container" id="login-container">
+            <h1>Login</h1>
+            <form id="login-form">
+                <label for="login-username">Username:</label>
+                <input type="text" id="login-username" name="login-username" required>
+                <br>
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" name="login-password" required>
+                <br>
+                <button type="submit">Login</button>
+            </form>
+            <p id="login-error-message"></p>
+            <div class="button-container">
+                <button class="register-button" id="register-button"> Click here to register account</button>
+            </div>
+        </div>
+        
+        <div class="form-container" id="register-container">
+            <h1>Register</h1>
+            <form id="register-form">
+                <label for="register-username">Username:</label>
+                <input type="text" id="register-username" name="register-username" required>
+                <br>
+                <label for="register-password">Password:</label>
+                <input type="password" id="register-password" name="register-password" required>
+                <br>
+                <button type="submit">Register</button>
+            </form>
+            <p id="register-success-message"></p>
+            <p id="register-error-message"></p>
+            <div class="button-container">
+                <button class="register-button" id="return-to-login">Back to Login</button>
+            </div>
+        </div>
+    
+    
+    <script>
+        const introductionContainer = document.getElementById("introduction-container");         //给每个按钮赋名：例如：introductionContainer在script中 = html和css中的introduction-container
+        const genderSelectionContainer = document.getElementById("gender-selection-container");
+        const loginContainer = document.getElementById("login-container");
+        const registerContainer = document.getElementById("register-container");
+        const startButton = document.getElementById("start-button");
+        const maleSelectionButton = document.getElementById("male-selection");
+        const femaleSelectionButton = document.getElementById("female-selection");
+        const registerButton = document.getElementById("register-button");
+        const returnToLoginButton = document.getElementById("return-to-login");
+        
+        
+        
+
+
+
+
+
+
+
+        startButton.addEventListener("click", function(event) {
+            event.preventDefault();
+            introductionContainer.style.display = 'none';
+            genderSelectionContainer.style.display = 'block';
+        });
+        maleSelectionButton.addEventListener("click", function() {
+            genderSelectionContainer.style.display = 'none';
+            loginContainer.style.display = 'block';
+        });
+
+        femaleSelectionButton.addEventListener("click", function() {
+            genderSelectionContainer.style.display = 'none';
+            loginContainer.style.display = 'block';
+        });
+
+
+
+
+
+
+
+
+        registerButton.addEventListener("click", function(event) {      //点击 register触发function
+            event.preventDefault();                                      //防止不需要的页面刷新函数
+            document.getElementById("login-error-message").textContent = "";    // 清除登录错误信息
+            loginContainer.style.display = 'none';                    //remove loginContainer
+            registerContainer.style.display = 'block';                   // registerContainer 启动
+        });
+        
+        returnToLoginButton.addEventListener("click", function(event) {     //点击触发returnToLogin按钮触发function
+            event.preventDefault();                                         //防止不需要的页面刷新函数
+            document.getElementById("register-error-message").textContent = ""; // Clear any registration error message
+            document.getElementById("register-success-message").textContent = ""; // Clear any registration success message
+            registerContainer.style.display = 'none';                  //remove registerContainer
+            loginContainer.style.display = 'block';                        //启动 loginContainer
+        });
+
+        const users = [                                                     //常量users，储存用户信息  
+            { username: "user1", password: "password1" },
+            { username: "user2", password: "password2" }
+        ];
+
+        
+        
+        
+        
+        
+        document.getElementById("login-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const loginUsername = document.getElementById("login-username").value;
+    const loginPassword = document.getElementById("login-password").value;
+
+    try {
+        // 发送POST请求到后端
+        const response = await fetch("http://18.220.199.71:80/login", {    //使用接口80
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: loginUsername,
+                password: loginPassword
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.status === 200) {  // 如果后端返回200，说明登录成功
+            window.location.href = "updated index.html";
+        } else if (response.status === 400) {  // 如果后端返回400，说明登录失败
+            document.getElementById("login-error-message").textContent = data.message;
+        }
+    } catch (error) {
+        document.getElementById("login-error-message").textContent = "An error occurred. Please try again.";
+    }
+});
+
+
+
+
+        
+        
+        
+        document.getElementById("register-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            document.getElementById("register-error-message").textContent = "";
+            document.getElementById("register-success-message").textContent = "";
+            const registerUsername = document.getElementById("register-username").value;
+            const registerPassword = document.getElementById("register-password").value;
+
+            try {
+                const response = await fetch("http://18.220.199.71:80/register", {     //使用接口80
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+            },
+                    body: JSON.stringify({
+                        username: registerUsername,
+                        password: registerPassword
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.status === 200) {
+            document.getElementById("register-success-message").textContent = data.message + " Redirecting to login in 5s!";
+            setTimeout(function() {
+                document.getElementById("login-error-message").textContent = "";    //清除所有error message
+                document.getElementById("register-error-message").textContent = "";
+                document.getElementById("login-error-message").textContent = "";
+                registerContainer.style.display = 'none';
+                loginContainer.style.display = 'block';
+            }, 5000);
+        } else if (response.status === 400) {
+            document.getElementById("register-error-message").textContent = data.message;
+        }
+
+    } catch (error) {
+        document.getElementById("register-error-message").textContent = "An error occurred. Please try again.";
+    }
+});
+
+
+    </script>
+</body>
+</html>
